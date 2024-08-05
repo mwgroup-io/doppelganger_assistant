@@ -77,7 +77,14 @@ jobs:
           path: build/
 
       - name: Upload build artifacts for macOS
-        if: matrix.os == 'macos-latest' || matrix.os == 'macos-13'
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.os }}-${{ matrix.arch }}
+          path: build/
+
+      - name: Upload build artifacts for macOS (macos-13)
+        if: matrix.os == 'macos-13'
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}
@@ -96,14 +103,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p build
-          for os in macos-latest macos-13; do
-            for arch in amd64 arm64; do
+          for os in macos-latest; do
+            for arch in arm64; do
               echo "Downloading build-${os}-${arch}..."
               mkdir -p build-${os}-${arch}
               gh run download --name build-${os}-${arch} --dir build-${os}-${arch}/ || echo "Failed to download build-${os}-${arch}"
               mv build-${os}-${arch}/* build/ || echo "Failed to move files for build-${os}-${arch}"
             done
           done
+          echo "Downloading build-macos-13-amd64..."
+          mkdir -p build-macos-13-amd64
+          gh run download --name build-macos-13-amd64 --dir build-macos-13-amd64/ || echo "Failed to download build-macos-13-amd64"
+          mv build-macos-13-amd64/* build/ || echo "Failed to move files for build-macos-13-amd64"
           echo "Downloading build-ubuntu-latest..."
           mkdir -p build-ubuntu-latest
           gh run download --name build-ubuntu-latest --dir build-ubuntu-latest/ || echo "Failed to download build-ubuntu-latest"
