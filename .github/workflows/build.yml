@@ -20,7 +20,7 @@ jobs:
           - os: ubuntu-latest
             arch: amd64
           - os: ubuntu-latest
-            arch: arm64
+            arch: aarch64
           - os: macos-latest
             arch: amd64
           - os: macos-latest
