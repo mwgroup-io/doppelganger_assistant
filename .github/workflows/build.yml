@@ -45,6 +45,17 @@ jobs:
           chmod +x ./build.sh
           ./build.sh
 
+      - name: List all files in build directory
+        run: ls build/
+
+  create_release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -62,8 +73,5 @@ jobs:
         run: |
           for file in build/*; do
             echo "Uploading $file..."
-            gh release upload v1.0-${{ github.sha }} "$file" --clobber
+            gh release upload ${{ steps.create_release.outputs.tag_name }} "$file" --clobber
           done
-
-      - name: List all files in build directory
-        run: ls build/
