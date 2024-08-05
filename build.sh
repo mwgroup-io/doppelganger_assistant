@@ -28,6 +28,17 @@ else
     print_color "green" "fyne is already installed."
 fi
 
+print_color "blue" "Checking if fyne-cross is installed..."
+# Ensure that fyne-cross is installed
+if ! command -v fyne-cross &> /dev/null
+then
+    print_color "yellow" "fyne-cross not found. Installing..."
+    go install github.com/fyne-io/fyne-cross@latest
+    export PATH=$PATH:$(go env GOPATH)/bin
+else
+    print_color "green" "fyne-cross is already installed."
+fi
+
 print_color "blue" "Initializing Go module..."
 # Initialize Go module
 go mod init doppelganger_assistant || true
@@ -39,18 +50,10 @@ mkdir -p build
 print_color "blue" "Building the application..."
 print_color "yellow" "CPU Architecture: $(uname -m)"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if [[ $(uname -m) == "x86_64" ]]; then
-        print_color "blue" "Building for Linux amd64..."
-        fyne package -os linux -icon img/doppelganger_assistant.png -appID io.mwgroup.doppelganger_assistant
-        mv doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_amd64.tar.xz
-    elif [[ $(uname -m) == "aarch64" ]]; then
-        print_color "blue" "Building for Linux arm64..."
-        fyne package -os linux -icon img/doppelganger_assistant.png -appID io.mwgroup.doppelganger_assistant
-        mv doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_arm64.tar.xz
-    else
-        print_color "red" "Unsupported architecture for Linux."
-        exit 1
-    fi
+    print_color "blue" "Building for Linux amd64 and arm64 using fyne-cross..."
+    fyne-cross linux -arch amd64,arm64 -icon img/doppelganger_assistant.png -app-id io.mwgroup.doppelganger_assistant
+    mv fyne-cross/bin/linux-amd64/doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_amd64.tar.xz
+    mv fyne-cross/bin/linux-arm64/doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_arm64.tar.xz
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     if [[ $(uname -m) == "arm64" ]]; then
         print_color "blue" "Building for macOS arm64..."
