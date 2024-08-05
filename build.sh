@@ -81,4 +81,4 @@ print_color "blue" "Cleaning up..."
 # rm -rf fyne-cross/
 # rm Icon.png
 
-print_color "green" "Build process completed successfully."
+print_color "green" "Build process completed successfully.."
