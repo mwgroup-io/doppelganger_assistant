@@ -73,5 +73,5 @@ jobs:
         run: |
           for file in build/*; do
             echo "Uploading $file..."
-            gh release upload ${{ steps.create_release.outputs.tag_name }} "$file" --clobber
+            gh release upload v1.0-${{ github.sha }} "$file" --clobber
           done
