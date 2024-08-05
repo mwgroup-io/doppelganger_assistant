@@ -66,6 +66,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          mkdir -p build
           for os in macos-latest ubuntu-latest; do
             for arch in amd64 arm64; do
               echo "Downloading build-${os}-${arch}..."
