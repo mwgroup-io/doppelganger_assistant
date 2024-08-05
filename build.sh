@@ -52,8 +52,8 @@ print_color "yellow" "CPU Architecture: $(uname -m)"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     print_color "blue" "Building for Linux amd64 and arm64 using fyne-cross..."
     fyne-cross linux -arch amd64,arm64 -icon img/doppelganger_assistant.png -app-id io.mwgroup.doppelganger_assistant
-    mv fyne-cross/bin/linux-amd64/doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_amd64.tar.xz
-    mv fyne-cross/bin/linux-arm64/doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_arm64.tar.xz
+    mv fyne-cross/dist/linux-amd64/doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_amd64.tar.xz
+    mv fyne-cross/dist/linux-arm64/doppelganger_assistant.tar.xz build/doppelganger_assistant_linux_arm64.tar.xz
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     if [[ $(uname -m) == "arm64" ]]; then
         print_color "blue" "Building for macOS arm64..."
