@@ -54,6 +54,14 @@ jobs:
         run: ls build/
 
       - name: Upload build artifacts
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.os }}
+          path: build/
+
+      - name: Upload build artifacts for macOS
+        if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}
@@ -72,7 +80,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p build
-          for os in macos-latest ubuntu-latest; do
+          for os in macos-latest; do
             for arch in amd64 arm64; do
               echo "Downloading build-${os}-${arch}..."
               mkdir -p build-${os}-${arch}
@@ -80,6 +88,10 @@ jobs:
               mv build-${os}-${arch}/* build/ || echo "Failed to move files for build-${os}-${arch}"
             done
           done
+          echo "Downloading build-ubuntu-latest..."
+          mkdir -p build-ubuntu-latest
+          gh run download --name build-ubuntu-latest --dir build-ubuntu-latest/ || echo "Failed to download build-ubuntu-latest"
+          mv build-ubuntu-latest/* build/ || echo "Failed to move files for build-ubuntu-latest"
 
       - name: List all files in build directory before upload
         run: ls -l build/
