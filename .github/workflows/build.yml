@@ -69,7 +69,9 @@ jobs:
           for os in macos-latest ubuntu-latest; do
             for arch in amd64 arm64; do
               echo "Downloading build-${os}-${arch}..."
-              gh run download --name build-${os}-${arch} --dir build/
+              mkdir -p build-${os}-${arch}
+              gh run download --name build-${os}-${arch} --dir build-${os}-${arch}/
+              mv build-${os}-${arch}/* build/
             done
           done
 
@@ -77,7 +79,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GH_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           tag_name: v1.0-${{ github.sha }}
           release_name: Release ${{ github.sha }}
@@ -86,7 +88,7 @@ jobs:
 
       - name: Upload Release Assets
         env:
-          GH_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
           if [ -d build ]; then
             for file in build/*; do
