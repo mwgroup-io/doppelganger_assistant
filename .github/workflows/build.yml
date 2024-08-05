@@ -71,8 +71,8 @@ jobs:
             for arch in amd64 arm64; do
               echo "Downloading build-${os}-${arch}..."
               mkdir -p build-${os}-${arch}
-              gh run download --name build-${os}-${arch} --dir build-${os}-${arch}/
-              mv build-${os}-${arch}/* build/
+              gh run download --name build-${os}-${arch} --dir build-${os}-${arch}/ || echo "Failed to download build-${os}-${arch}"
+              mv build-${os}-${arch}/* build/ || echo "Failed to move files for build-${os}-${arch}"
             done
           done
 

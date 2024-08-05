@@ -33,13 +33,12 @@ print_color "blue" "Initializing Go module..."
 go mod init doppelganger_assistant || true
 go mod tidy
 
-print_color "blue" "Building for the current platform..."
-mkdir -p build/
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    print_color "blue" "Installing Linux dependencies..."
-    sudo apt-get update
-    sudo apt-get install -y libxcursor-dev libgl1-mesa-dev xorg-dev
+print_color "blue" "Creating build directory..."
+mkdir -p build
 
+print_color "blue" "Building the application..."
+print_color "yellow" "CPU Architecture: $(uname -m)"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     if [[ $(uname -m) == "x86_64" ]]; then
         print_color "blue" "Building for Linux amd64..."
         fyne package -os linux -icon img/doppelganger_assistant.png -appID io.mwgroup.doppelganger_assistant
@@ -76,9 +75,7 @@ else
     exit 1
 fi
 
-print_color "blue" "Cleaning up..."
-# Clean up
-# rm -rf fyne-cross/
-# rm Icon.png
+print_color "blue" "Listing files in build directory..."
+ls -l build/
 
-print_color "green" "Build process completed successfully.."
+print_color "green" "Build process completed successfully."
