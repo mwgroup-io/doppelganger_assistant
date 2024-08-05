@@ -16,6 +16,15 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
         arch: [amd64, arm64]
+        include:
+          - os: ubuntu-latest
+            arch: amd64
+          - os: ubuntu-latest
+            arch: arm64
+          - os: macos-latest
+            arch: amd64
+          - os: macos-latest
+            arch: arm64
 
     steps:
       - name: Set up Git repository
