@@ -65,7 +65,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
-          name: build-${{ matrix.os }}-${{ matrix.arch }}
+          name: '**'  # Use wildcard to download all artifacts
           path: build/
 
       - name: Create Release
