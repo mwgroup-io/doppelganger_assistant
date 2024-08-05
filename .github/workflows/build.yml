@@ -76,6 +76,9 @@ jobs:
             done
           done
 
+      - name: List all files in build directory before upload
+        run: ls -l build/
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -95,8 +98,12 @@ jobs:
             for file in build/*; do
               echo "Uploading $file..."
               gh release upload v1.0-${{ github.sha }} "$file" --clobber
+              sleep 5  # Add a delay between uploads
             done
           else
             echo "Build directory does not exist or is empty."
             exit 1
           fi
+
+      - name: List all files in build directory after upload
+        run: ls -l build/
