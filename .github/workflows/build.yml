@@ -57,7 +57,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v2
         with:
-          name: build-${{ matrix.os }}
+          name: build-ubuntu-latest
           path: build/
 
       - name: Upload build artifacts for macOS
