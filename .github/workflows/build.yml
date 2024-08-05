@@ -63,10 +63,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: '**'  # Use wildcard to download all artifacts
-          path: build/
+        run: |
+          for os in macos-latest ubuntu-latest; do
+            for arch in amd64 arm64; do
+              echo "Downloading build-${os}-${arch}..."
+              gh run download --name build-${os}-${arch} --dir build/
+            done
+          done
 
       - name: Create Release
         id: create_release
